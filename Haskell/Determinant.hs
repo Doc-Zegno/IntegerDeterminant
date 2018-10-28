@@ -3,24 +3,33 @@ module Determinant (
 ) where
 
 
+import Data.Maybe
+
+
+indicator::Integer->Int
+indicator x
+    | x /= 0 = 1
+    | otherwise = 0
+
+
 -- Helper for findMain()
-findMainRow::[[Integer]]->Maybe Integer->Maybe Int->Int->Int->(Maybe Int, Int)
-findMainRow [] _ minRow _ numNonZero = (minRow, numNonZero)
-findMainRow (row:rows) minAbs minRow index numNonZero
-    | head row /= 0 = 
-        let currentAbs = abs (head row) in
-            case minAbs of
-                Nothing -> findMainRow rows (Just currentAbs) (Just index) (index + 1) (numNonZero + 1)
-                Just x -> 
-                    if currentAbs < x
-                        then findMainRow rows (Just currentAbs) (Just index) (index + 1) (numNonZero + 1)
-                        else findMainRow rows minAbs minRow (index + 1) (numNonZero + 1)
-    | otherwise = findMainRow rows minAbs minRow (index + 1) numNonZero
+findMainRow::[[Integer]]->Int->(Maybe Integer, Maybe Int, Int)
+findMainRow [] _ = (Nothing, Nothing, 0)
+findMainRow (row:rows) index =
+    let (minAbs, minRow, numNonZero) = findMainRow rows (index + 1)
+        currentAbs = abs (head row)
+    in
+        let previousAbs = fromMaybe (currentAbs + 1) minAbs in
+            if currentAbs /= 0 && currentAbs < previousAbs
+                then (Just currentAbs, Just index, numNonZero + 1)
+                else (minAbs, minRow, numNonZero + (indicator currentAbs)) 
 
 
 -- Get index (if exists) of main row and number of lines with non-zero leading elements
 findMain::[[Integer]]->(Maybe Int, Int)
-findMain rows = findMainRow rows Nothing Nothing 0 0
+findMain rows =
+    let (minAbs, minRow, numNonZero) = findMainRow rows 0 in
+        (minRow, numNonZero)
 
 
 -- Extract row with given index from list of rows
