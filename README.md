@@ -9,7 +9,7 @@ of determinant of integers.
 Obviously, such a determinant will be an integer so this program
 shouldn't use floating numbers and still be efficient enough.
 
-Current version makes use of Gauss' method adjusted for integers
+Current version makes use of Gauss method adjusted for integers
 which implies the algorithm is expected to run in polynomial time
 
 
@@ -21,7 +21,10 @@ Project is split in two folders:
     * `gen.cpp` simple random matrix generator
     * `test.cpp` simple test program 
       (also can be considered an example of usage)
-2. `Haskell` which contains version above rewritten in Haskell
+2. `Haskell/` 
+    * `Determinant.hs` which contains version above rewritten in Haskell
+    * `ExponentialDeterminant.hs` version based on Laplace expansion
+      (can be used for comparison) 
 
 
 ## License

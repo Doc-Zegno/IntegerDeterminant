@@ -65,7 +65,7 @@ determinant rows =
             Nothing -> 0
             Just index -> 
                 let (main, rest) = extractRow rows index
-                    multiplier = if index == 0 then 1 else -1
+                    multiplier = if even index then 1 else -1
                 in
                     if numNonZero == 1
                         then multiplier * (head main) * determinant (map tail rest)
